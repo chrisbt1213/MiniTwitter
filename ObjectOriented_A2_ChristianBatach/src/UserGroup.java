@@ -9,6 +9,9 @@ public class UserGroup extends UsersComponent {
 
 	private String groupID;
 	
+	// To add creation time attribute
+	private long creationTime;
+	
 	// Implements UserComponent
 	@Override
 	public void setID(String id) {
@@ -29,6 +32,7 @@ public class UserGroup extends UsersComponent {
 	
 	public UserGroup(String id){
 		setID(id);
+		setTimeStamp();
 	}
 	
 	public void insert(UsersComponent user,int childNodeIndex){
@@ -37,6 +41,16 @@ public class UserGroup extends UsersComponent {
 
 	public void removeUser(UsersComponent user){
 		super.remove(user);
+	}
+
+	@Override
+	public void setTimeStamp() {
+		creationTime = System.currentTimeMillis();
+	}
+
+	@Override
+	public long getTimeStamp() {
+		return creationTime;
 	}
 		
 }

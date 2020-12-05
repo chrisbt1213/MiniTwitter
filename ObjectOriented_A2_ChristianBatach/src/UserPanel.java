@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -32,6 +33,7 @@ public class UserPanel {
 		private JButton postTweetBtn;
 		private JPanel newsFeedPanel;
 		private JList<String> newsFeedList;
+		private JLabel lblUpdate;
 		private User thisUser;
 		private TreeActionsBackEnd treeDataHandler;
 		private DefaultListModel<Subject> modelFollowing;
@@ -52,9 +54,10 @@ public class UserPanel {
 		
 		userFrame = new JFrame();
 		userFrame.setVisible(true);
-		userFrame.setTitle("User View" + " of @" + thisUser.getID());
+		// Displays creationTime attribute of user (for A3)
+		userFrame.setTitle("User View" + " of @" + thisUser.getID() + " Created at " + String.valueOf(thisUser.getTimeStamp()));
 		userFrame.getContentPane().setBackground(new Color(0, 153, 204));
-		userFrame.setBounds(100, 100, 470, 610);
+		userFrame.setBounds(100, 100, 470, 640);
 		userFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		userFrame.getContentPane().setLayout(null);
 		
@@ -116,6 +119,11 @@ public class UserPanel {
 		newsFeedList = new JList<String>(thisUser.getNewsFeedListModel());
 		newsFeedList.setBounds(6, 18, 426, 218);
 		newsFeedPanel.add(newsFeedList);
+		
+		lblUpdate = new JLabel("Last Updated: " + String.valueOf(thisUser.getLastUpdateTime()));
+		lblUpdate.setBounds(29, 576, 425, 27);
+		userFrame.getContentPane().add(lblUpdate);
+		
 	}
 	
 	public void tweet(String message){
@@ -157,6 +165,8 @@ public class UserPanel {
 			if(e.getSource() == postTweetBtn){
 				String message = postTweetTxt.getText().trim();
 				tweet(message);
+				//The moment a tweet is posted the time updates on the label
+				lblUpdate.setText("Last Updated: " + String.valueOf(thisUser.getLastUpdateTime()));
 			}
 		}
 

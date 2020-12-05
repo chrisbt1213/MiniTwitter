@@ -26,11 +26,15 @@ public class User extends UsersComponent implements Observer, Subject {
 	// Used to check that a message has been posted and notify observers 
 	private boolean messagePostedAlert = false;
 	
+	// creationTime adds the creation time attribute and lastUpdateTime updates when a new tweet is posted
+	private long creationTime, lastUpdateTime;
+	
 	// Constructor
 	public User(String id){
 		setID(id);
 		this.allowsChildren=false;
 		this.newsFeedList=new DefaultListModel<String>();
+		setTimeStamp();
 	}
 	
 	// Implements UserComponent
@@ -69,6 +73,8 @@ public class User extends UsersComponent implements Observer, Subject {
 	public void tweetByThisUser(String message){
 		this.message = message;
 		newsFeedList.addElement("Posted by me: "+message);
+		//Assigns the last updated time of this owner's feed
+		lastUpdateTime = System.currentTimeMillis();
 		this.messagePostedAlert = true;
 		notifyObservers();
 	}
@@ -124,11 +130,30 @@ public class User extends UsersComponent implements Observer, Subject {
 		//Updates news feeds and shows who posted the message
 		this.newsFeedList.addElement("Posted by "+subject.toString()+": "+update);
 		
+		lastUpdateTime = System.currentTimeMillis();
+		//Allows other users to know when this user last updated their feed
+		this.newsFeedList.addElement(subject.toString()+" last updated on " + String.valueOf(getLastUpdateTime()));
+		
 	}
 	@Override
 	public void setSubject(Subject subject) {
 		following.addElement(subject);
 		
 	} // ********************************************************
+
+	@Override
+	public void setTimeStamp() {
+		creationTime = System.currentTimeMillis();
+	}
+
+	@Override
+	public long getTimeStamp() {
+		return creationTime;
+	}
+	
+	public long getLastUpdateTime() {
+		return lastUpdateTime;
+	}
+
 
 }

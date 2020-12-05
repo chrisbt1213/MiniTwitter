@@ -36,6 +36,8 @@ public class AdminControlPanel {
 	private JButton btnShowGroupTotal;
 	private JButton btnShowMessagesTotal;
 	private JButton btnShowPosPercent;
+	private JButton btnIdVerification;
+	private JButton btnLastUpdatedUser;
 	private JTree tree;
 	private TreeActionsBackEnd actionsTree;
 	
@@ -151,6 +153,20 @@ public class AdminControlPanel {
 		btnShowPosPercent.addActionListener(listener);
 		frame.getContentPane().add(btnShowPosPercent);
 		
+		btnIdVerification = new JButton("ID Verification");
+		btnIdVerification.setForeground(new Color(0, 153, 204));
+		btnIdVerification.setFont(new Font("Helvetica Neue", Font.PLAIN, 18));
+		btnIdVerification.setBounds(304, 235, 239, 67);
+		btnIdVerification.addActionListener(listener);
+		frame.getContentPane().add(btnIdVerification);
+		
+		btnLastUpdatedUser = new JButton("Last Updated User");
+		btnLastUpdatedUser.setForeground(new Color(0, 153, 204));
+		btnLastUpdatedUser.setFont(new Font("Helvetica Neue", Font.PLAIN, 18));
+		btnLastUpdatedUser.setBounds(555, 235, 239, 67);
+		btnLastUpdatedUser.addActionListener(listener);
+		frame.getContentPane().add(btnLastUpdatedUser);
+		
 		panelTree = new JPanel();
 		panelTree.setBackground(new Color(0, 204, 255));
 		panelTree.setBorder(new TitledBorder(null, "Tree View", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -224,6 +240,8 @@ public class AdminControlPanel {
 					return;
 				if(actionsTree.addNode(selectedNode,newUserGroup)){
 					tree.scrollPathToVisible(new TreePath(newUserGroup.getPath()));
+					//prints creationTime attribute on console
+					System.out.println(newUserGroup.getTimeStamp());
 				}
 				else {
 					return;
@@ -234,6 +252,24 @@ public class AdminControlPanel {
 				openUserView(selectedNode);
 			}
 			else{
+				// Validates names of groups/users
+				if(e.getSource()==btnIdVerification){
+					ShowValidationVisitor validation=new ShowValidationVisitor();
+					actionsTree.accept(validation);
+					if(validation.result() > 0){
+						popUp("A total of "+validation.result()+" user or group names are invalid because they "
+								+ "contain spaces!","Invalid Names");
+					}
+					else {
+						popUp("All user and group names are valid!","Valid Names");
+					}
+				}
+				//Displays User that Last Updated
+				if(e.getSource()==btnLastUpdatedUser){
+					ShowLastUpdatedVisitor lastUpdated=new ShowLastUpdatedVisitor();
+					actionsTree.accept(lastUpdated);
+					popUp("The user that last updated is "+lastUpdated.getLastUpdated(),"Last Updated User");
+				}
 				//Displays Total Number of User nodes on Click
 				if(e.getSource()==btnShowUserTotal){
 					ShowUserTotalVisitor userTotal=new ShowUserTotalVisitor();

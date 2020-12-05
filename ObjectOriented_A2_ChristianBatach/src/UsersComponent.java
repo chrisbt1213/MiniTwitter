@@ -15,5 +15,10 @@ public abstract class UsersComponent extends DefaultMutableTreeNode{
 	public abstract String getID();
 	
 	public abstract String toString();
+	
+	//Added Bottom Methods for A3
+	public abstract void setTimeStamp();
+	
+	public abstract long getTimeStamp();
 
 }

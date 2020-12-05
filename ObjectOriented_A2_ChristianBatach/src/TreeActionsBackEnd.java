@@ -21,7 +21,7 @@ public class TreeActionsBackEnd implements Visitable {
 		JOptionPane.showMessageDialog(null, errorMessage, titleBar, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	//Applie default Root group
+	//Applies default Root group
 	public  TreeActionsBackEnd(Map<String,UsersComponent> map){
 		UsersComponent root=new UserGroup("Root");
 		this.map=map;
@@ -69,7 +69,6 @@ public class TreeActionsBackEnd implements Visitable {
 		for (Map.Entry<String, UsersComponent> entry : map.entrySet()){
 			  visitor.visit(entry.getValue());
 		}
-
 
 	}
 
